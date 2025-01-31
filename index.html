@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Másodfokú egyenlet megoldó</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+        .explanation {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #e9f7ef;
+        }
+        .illustration {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .illustration img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Másodfokú egyenlet megoldó</h1>
+        <p>Adja meg az egyenlet együtthatóit (<em>a</em>, <em>b</em>, <em>c</em>), és a program kiszámolja a megoldásokat.</p>
+        <form id="solverForm">
+            <label for="a">a:</label>
+            <input type="number" id="a" name="a" required step="any">
+
+            <label for="b">b:</label>
+            <input type="number" id="b" name="b" required step="any">
+
+            <label for="c">c:</label>
+            <input type="number" id="c" name="c" required step="any">
+
+            <button type="button" onclick="solveEquation()">Megoldás</button>
+        </form>
+
+        <div class="result" id="result"></div>
+
+        <div class="explanation">
+            <h2>Hogyan működik?</h2>
+            <p>A másodfokú egyenlet általános alakja:</p>
+            <p><strong>ax² + bx + c = 0</strong></p>
+            <p>Ebben az egyenletben:</p>
+            <ul>
+                <li><strong>a</strong>: a másodfokú tag együtthatója (nem lehet nulla).</li>
+                <li><strong>b</strong>: az elsőfokú tag együtthatója.</li>
+                <li><strong>c</strong>: a konstans tag.</li>
+            </ul>
+            <p>A megoldáshoz a diszkriminánst (<strong>Δ</strong>) számítjuk ki a következő képlet segítségével:</p>
+            <p><strong>Δ = b² - 4ac</strong></p>
+            <p>Ez alapján három eset lehetséges:</p>
+            <ol>
+                <li>Ha <strong>Δ &gt; 0</strong>, az egyenletnek két különböző valós gyöke van.</li>
+                <li>Ha <strong>Δ = 0</strong>, az egyenletnek egy (kétszeres) valós gyöke van.</li>
+                <li>Ha <strong>Δ &lt; 0</strong>, az egyenletnek nincs valós gyöke, csak komplex megoldásai vannak.</li>
+            </ol>
+            <p>A gyökök kiszámításának képletei:</p>
+            <p><strong>x₁, x₂ = (-b ± √Δ) / 2a</strong></p>
+        </div>
+
+        <div class="illustration">
+            <h2>Illusztráció</h2>
+            <p>A másodfokú egyenletek grafikus ábrázolása parabola formájában történik. Az alábbi kép egy példát mutat:</p>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Parabola.svg/1200px-Parabola.svg.png" alt="Parabola grafikon">
+            <p>Ahol a parabola metszi az x-tengelyt, ott találhatók az egyenlet gyökei (ha léteznek).</p>
+        </div>
+
+        <div class="explanation">
+            <h2>Hol használjuk a másodfokú egyenleteket?</h2>
+            <p>A másodfokú egyenletek számos területen megjelennek, például:</p>
+            <ul>
+                <li><strong>Fizika:</strong> Mozgásegyenletekben, például szabadon eső tárgyak pályájának leírására.</li>
+                <li><strong>Építészet:</strong> Boltozatok és ívek tervezésénél.</li>
+                <li><strong>Gazdaság:</strong> Maximális vagy minimális profit számításánál.</li>
+                <li><strong>Matematika:</strong> Függvények elemzésénél és grafikonok ábrázolásánál.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function solveEquation() {
+            const a = parseFloat(document.getElementById('a').value);
+            const b = parseFloat(document.getElementById('b').value);
+            const c = parseFloat(document.getElementById('c').value);
+
+            if (a === 0) {
+                document.getElementById('result').innerHTML = "Az 'a' értéke nem lehet nulla, mivel ez nem másodfokú egyenlet.";
+                return;
+            }
+
+            const discriminant = b * b - 4 * a * c;
+            let explanation = `<p><strong>Az egyenlet:</strong> ${a}x² + ${b}x + ${c} = 0</p>`;
+            explanation += `<p><strong>Diszkrimináns kiszámítása:</strong> Δ = b² - 4ac = (${b})² - 4(${a})(${c}) = ${discriminant}</p>`;
+
+            if (discriminant > 0) {
+                const x1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+                const x2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+                explanation += `<p><strong>Két valós megoldás van:</strong></p>`;
+                explanation += `<p>x₁ = (-b + √Δ) / 2a = (${b * -1} + √${discriminant}) / (2 × ${a}) = ${x1}</p>`;
+                explanation += `<p>x₂ = (-b - √Δ) / 2a = (${b * -1} - √${discriminant}) / (2 × ${a}) = ${x2}</p>`;
+            } else if (discriminant === 0) {
+                const x = -b / (2 * a);
+                explanation += `<p><strong>Egyszeres valós gyök van:</strong></p>`;
+                explanation += `<p>x = -b / 2a = ${b * -1} / (2 × ${a}) = ${x}</p>`;
+            } else {
+                explanation += `<p><strong>Nincs valós megoldás</strong>, mivel a diszkrimináns negatív.</p>`;
+            }
+
+            document.getElementById('result').innerHTML = explanation;
+        }
+    </script>
+</body>
+</html>
