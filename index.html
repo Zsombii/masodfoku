@@ -4,74 +4,90 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Másodfokú egyenlet megoldó</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+        *{
+            font-family: 'Montserrat';
+        }
         body {
             font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 20px;
+            margin: 0;
+            background-color: rgb(78, 76, 76);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
         .container {
-            max-width: 600px;
-            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.8);
             padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
         }
-        label {
+        label, input, button {
             display: block;
+            width: 100%;
             margin-top: 10px;
         }
         input {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            width: 96%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
         }
         button {
-            background-color: #007BFF;
-            color: white;
+            background: #ff9800;
+            padding: 10px;
             border: none;
-            padding: 10px 15px;
-            border-radius: 4px;
+            border-radius: 5px;
+            font-size: 18px;
             cursor: pointer;
+            transition: 0.3s;
         }
         button:hover {
-            background-color: #0056b3;
+            background: #e68900;
         }
-        .result {
-            margin-top: 20px;
+        .result, .graph-container {
+            display: none;
+            background: rgba(255, 255, 255, 0.1);
             padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: #fff;
+            margin-top: 15px;
+            border-radius: 5px;
         }
-        .explanation {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: #e9f7ef;
+        canvas {
+            max-width: 100%;
         }
-        .illustration {
+        .description {
+            max-width: 600px;
             margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             text-align: center;
         }
-        .illustration img {
-            max-width: 100%;
-            height: auto;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            margin-top: 10px;
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            width: 100%;
+            max-width: 500px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Másodfokú egyenlet megoldó</h1>
-        <p>Adja meg az egyenlet együtthatóit (<em>a</em>, <em>b</em>, <em>c</em>), és a program kiszámolja a megoldásokat.</p>
+        <p>Adja meg az együtthatókat és megkapja a megoldást!</p>
+        
         <form id="solverForm">
             <label for="a">a:</label>
             <input type="number" id="a" name="a" required step="any">
@@ -87,77 +103,82 @@
 
         <div class="result" id="result"></div>
 
-        <div class="explanation">
-            <h2>Hogyan működik?</h2>
-            <p>A másodfokú egyenlet általános alakja:</p>
-            <p><strong>ax² + bx + c = 0</strong></p>
-            <p>Ebben az egyenletben:</p>
-            <ul>
-                <li><strong>a</strong>: a másodfokú tag együtthatója (nem lehet nulla).</li>
-                <li><strong>b</strong>: az elsőfokú tag együtthatója.</li>
-                <li><strong>c</strong>: a konstans tag.</li>
-            </ul>
-            <p>A megoldáshoz a diszkriminánst (<strong>Δ</strong>) számítjuk ki a következő képlet segítségével:</p>
-            <p><strong>Δ = b² - 4ac</strong></p>
-            <p>Ez alapján három eset lehetséges:</p>
-            <ol>
-                <li>Ha <strong>Δ &gt; 0</strong>, az egyenletnek két különböző valós gyöke van.</li>
-                <li>Ha <strong>Δ = 0</strong>, az egyenletnek egy (kétszeres) valós gyöke van.</li>
-                <li>Ha <strong>Δ &lt; 0</strong>, az egyenletnek nincs valós gyöke, csak komplex megoldásai vannak.</li>
-            </ol>
-            <p>A gyökök kiszámításának képletei:</p>
-            <p><strong>x₁, x₂ = (-b ± √Δ) / 2a</strong></p>
-        </div>
-
-        <div class="illustration">
-            <h2>Illusztráció</h2>
-            <p>A másodfokú egyenletek grafikus ábrázolása parabola formájában történik. Az alábbi kép egy példát mutat:</p>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Parabola.svg/1200px-Parabola.svg.png" alt="Parabola grafikon">
-            <p>Ahol a parabola metszi az x-tengelyt, ott találhatók az egyenlet gyökei (ha léteznek).</p>
-        </div>
-
-        <div class="explanation">
-            <h2>Hol használjuk a másodfokú egyenleteket?</h2>
-            <p>A másodfokú egyenletek számos területen megjelennek, például:</p>
-            <ul>
-                <li><strong>Fizika:</strong> Mozgásegyenletekben, például szabadon eső tárgyak pályájának leírására.</li>
-                <li><strong>Építészet:</strong> Boltozatok és ívek tervezésénél.</li>
-                <li><strong>Gazdaság:</strong> Maximális vagy minimális profit számításánál.</li>
-                <li><strong>Matematika:</strong> Függvények elemzésénél és grafikonok ábrázolásánál.</li>
-            </ul>
+        <div class="graph-container" id="graphContainer">
+            <h2>Parabola ábrázolása</h2>
+            <canvas id="parabolaChart"></canvas>
         </div>
     </div>
 
+    <div class="description">
+        <h2>Mi a másodfokú függvény?</h2>
+        <p>A másodfokú függvények az alakjuk alapján parabolák, és az általános alakjuk: <strong>f(x) = ax² + bx + c</strong>. A paraméterek értéke határozza meg a parabola irányát és helyzetét.</p>
+        <h3>Hol használják?</h3>
+        <ul>
+            <li>Fizikában a szabadesés és ballisztikus mozgások modellezésére.</li>
+            <li>Gazdaságban költség-haszon elemzések során.</li>
+            <li>Mérnöki számításokban, például hidak és épületek tervezésében.</li>
+            <li>Számítógépes grafikában és animációkban.</li>
+        </ul>
+    </div>
+
+    <footer>
+        <p>Készítette: Veres Zsombor és Nagy Dávid</p>
+        <button onclick="window.location.href='https://sites.google.com/view/ita-vzs-10b/pojekt'" style="margin-top: 10px; padding: 10px; border: none; border-radius: 5px; background: #ff9800; color: rgb(0, 0, 0); font-size: 16px; cursor: pointer;">Veres Zsombor</button>
+        <button onclick="window.location.href='https://sites.google.com/view/ita-nd10b/projekt'" style="margin-top: 10px; padding: 10px; border: none; border-radius: 5px; background: #ff9800; color: rgb(0, 0, 0); font-size: 16px; cursor: pointer;">Nagy Dávid</button>
+    </footer>
+
     <script>
+        let chart;
+
         function solveEquation() {
             const a = parseFloat(document.getElementById('a').value);
             const b = parseFloat(document.getElementById('b').value);
             const c = parseFloat(document.getElementById('c').value);
 
             if (a === 0) {
-                document.getElementById('result').innerHTML = "Az 'a' értéke nem lehet nulla, mivel ez nem másodfokú egyenlet.";
+                document.getElementById('result').innerHTML = "Az 'a' értéke nem lehet nulla!";
+                document.getElementById('result').style.display = 'block';
+                document.getElementById('graphContainer').style.display = 'none';
                 return;
             }
 
             const discriminant = b * b - 4 * a * c;
             let explanation = `<p><strong>Az egyenlet:</strong> ${a}x² + ${b}x + ${c} = 0</p>`;
-            explanation += `<p><strong>Diszkrimináns kiszámítása:</strong> Δ = b² - 4ac = (${b})² - 4(${a})(${c}) = ${discriminant}</p>`;
-
+            explanation += `<p><strong>Diszkrimináns:</strong> Δ = ${discriminant}</p>`;
             if (discriminant > 0) {
                 const x1 = (-b + Math.sqrt(discriminant)) / (2 * a);
                 const x2 = (-b - Math.sqrt(discriminant)) / (2 * a);
-                explanation += `<p><strong>Két valós megoldás van:</strong></p>`;
-                explanation += `<p>x₁ = (-b + √Δ) / 2a = (${b * -1} + √${discriminant}) / (2 × ${a}) = ${x1}</p>`;
-                explanation += `<p>x₂ = (-b - √Δ) / 2a = (${b * -1} - √${discriminant}) / (2 × ${a}) = ${x2}</p>`;
+                explanation += `<p><strong>Két valós gyök:</strong> x₁ = ${x1.toFixed(2)}, x₂ = ${x2.toFixed(2)}</p>`;
             } else if (discriminant === 0) {
                 const x = -b / (2 * a);
-                explanation += `<p><strong>Egyszeres valós gyök van:</strong></p>`;
-                explanation += `<p>x = -b / 2a = ${b * -1} / (2 × ${a}) = ${x}</p>`;
+                explanation += `<p><strong>Egyszeres valós gyök:</strong> x = ${x.toFixed(2)}</p>`;
             } else {
-                explanation += `<p><strong>Nincs valós megoldás</strong>, mivel a diszkrimináns negatív.</p>`;
+                explanation += `<p><strong>Nincs valós megoldás</strong></p>`;
             }
 
             document.getElementById('result').innerHTML = explanation;
+            document.getElementById('result').style.display = 'block';
+            drawParabola(a, b, c);
+        }
+
+        function drawParabola(a, b, c) {
+            const ctx = document.getElementById('parabolaChart').getContext('2d');
+            let xValues = [], yValues = [];
+            for (let x = -10; x <= 10; x += 0.5) {
+                xValues.push(x);
+                yValues.push(a * x * x + b * x + c);
+            }
+
+            if (chart) chart.destroy();
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: xValues,
+                    datasets: [{ label: 'Parabola', data: yValues, borderColor: 'orange', borderWidth: 2, fill: false }]
+                }
+            });
+            document.getElementById('graphContainer').style.display = 'block';
         }
     </script>
 </body>
